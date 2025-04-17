@@ -1,7 +1,14 @@
-﻿namespace PetFamily.Domain.Models;
+﻿using CSharpFunctionalExtensions;
 
-public class Breed
+namespace PetFamily.Domain.Models;
+
+public class Breed : Entity
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = default!;
+    public new Guid Id { get; private set; }
+    public string Name { get; private set; }
+
+    public Breed(string name)
+    {
+        Name = name;
+    }
 }

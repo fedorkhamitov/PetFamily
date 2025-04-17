@@ -1,7 +1,15 @@
-﻿namespace PetFamily.Domain.Models;
+﻿using CSharpFunctionalExtensions;
 
-public class Species
+namespace PetFamily.Domain.Models;
+
+public class Species : Entity
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = default!;
+    public new Guid Id { get; private set; }
+    public string Name { get; private set; }
+    public IReadOnlyList<Breed> Breeds { get; private set; }
+    public Species(string name, IEnumerable<Breed> breeds)
+    {
+        Name = name;
+        Breeds = breeds.ToList().AsReadOnly();
+    }
 }
