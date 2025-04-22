@@ -5,7 +5,8 @@ namespace PetFamily.Domain.Models;
 
 public class Volunteer : Entity
 {
-    public new Guid Id { get; private set; }
+    //public new Guid Id { get; private set; }
+    public VolunteerId Id { get; private set; }
     public HumanName Name { get; private set; } = default!;
     public string Email { get; private set; } = default!;
     public string Description { get; private set; } = default!;
@@ -15,12 +16,14 @@ public class Volunteer : Entity
     public int LookingHomePetsCount => Pets.Count(p => p.HelpStatus == HelpStatus.LookingHome);
     public int NeedHelpPetsCount => Pets.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
     public string PhoneNumber { get; private set; } = default!;
-    public IReadOnlyList<SocialNetwork> SocialNetworkList { get; private set; } = default!;
+    public SocialNetworkList SocialNetworkList { get; private set; } = default!;
     public DonationDetails Donation { get; private set; }
     
     private Volunteer(){}
 
     public Volunteer(
+        //Guid id,
+        VolunteerId id,
         HumanName name,
         string email,
         string description,
@@ -28,10 +31,10 @@ public class Volunteer : Entity
         string phoneNumber,
         DonationDetails donation,
         IEnumerable<Pet> pets,
-        IEnumerable<SocialNetwork> socialNetworks
+        SocialNetworkList socialNetworks
         )
     {
-        Id = new Guid();
+        Id = id;
         Name = name;
         Email = email;
         Description = description;
@@ -39,6 +42,8 @@ public class Volunteer : Entity
         PhoneNumber = phoneNumber;
         Donation = donation;
         Pets = pets.ToList().AsReadOnly();
-        SocialNetworkList = socialNetworks.ToList().AsReadOnly();
+        SocialNetworkList = socialNetworks;
     }
+    
+    
 }
