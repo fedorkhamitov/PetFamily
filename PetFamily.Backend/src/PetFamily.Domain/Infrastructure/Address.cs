@@ -13,6 +13,10 @@ public record Address
     public string StreetNumber { get; }
     public string Apartment { get; }
 
+    private Address()
+    {
+    }
+
     private Address(
         string zipCode,
         string country,
