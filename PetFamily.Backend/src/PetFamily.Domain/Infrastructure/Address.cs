@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using System.Linq;
 
 namespace PetFamily.Domain.Infrastructure;
 
@@ -36,7 +35,7 @@ public record Address
         Apartment = apartment;
     }
 
-    public static Result<Address> Create(
+    public static Result<Address, Error> Create(
         string zipCode,
         string country,
         string state,
@@ -47,31 +46,31 @@ public record Address
         )
     {
         if (string.IsNullOrWhiteSpace(zipCode))
-            return Result.Failure<Address>("Zip Code cannot be empty");
+            return Errors.General.ValueIsRequired("ZipCode");
         if (!zipCode.All(char.IsDigit))
-            return Result.Failure<Address>("Zip Code cannot be words");
+            return Errors.General.ValueIsInvalid("ZipCode");
         if (string.IsNullOrWhiteSpace(country))
-            return Result.Failure<Address>("Country cannot be empty");
+            return Errors.General.ValueIsRequired("Country");
         if (country.All(char.IsLetter))
-            return Result.Failure<Address>("Country cannot be numbers");
+            return Errors.General.ValueIsInvalid("Country");
         if (string.IsNullOrWhiteSpace(state))
-            return Result.Failure<Address>("State cannot be empty");
+            return Errors.General.ValueIsRequired("State");
         if (state.All(char.IsLetter))
-            return Result.Failure<Address>("State cannot be numbers");
+            return Errors.General.ValueIsInvalid("State");
         if (string.IsNullOrWhiteSpace(city))
-            return Result.Failure<Address>("City cannot be empty");
+            return Errors.General.ValueIsRequired("City");
         if (city.All(char.IsLetter))
-            return Result.Failure<Address>("City cannot be numbers");
+            return Errors.General.ValueIsInvalid("City");
         if (string.IsNullOrWhiteSpace(streetName))
-            return Result.Failure<Address>("Street name cannot be empty");
+            return Errors.General.ValueIsRequired("StreetName");
         if (string.IsNullOrWhiteSpace(streetNumber))
-            return Result.Failure<Address>("Street Number cannot be empty");
+            return Errors.General.ValueIsRequired("StreetNumber");
         if (!streetNumber.All(char.IsDigit))
-            return Result.Failure<Address>("Street Number cannot be words");
+            return Errors.General.ValueIsInvalid("StreetNumber");
         if (string.IsNullOrWhiteSpace(apartment))
-            return Result.Failure<Address>("Apartment cannot be empty");
+            return Errors.General.ValueIsInvalid("Apartment");
         if (!apartment.All(char.IsDigit))
-            return Result.Failure<Address>("Apartment cannot be words");
+            return Errors.General.ValueIsInvalid("Apartment");
         
         return new Address(
             zipCode,

@@ -5,7 +5,6 @@ namespace PetFamily.Domain.Models;
 
 public class Volunteer : Entity
 {
-    //public new Guid Id { get; private set; }
     public VolunteerId Id { get; private set; }
     public HumanName Name { get; private set; } = default!;
     public string Email { get; private set; } = default!;
@@ -16,13 +15,33 @@ public class Volunteer : Entity
     public int LookingHomePetsCount => Pets.Count(p => p.HelpStatus == HelpStatus.LookingHome);
     public int NeedHelpPetsCount => Pets.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
     public string PhoneNumber { get; private set; } = default!;
-    public SocialNetworkList SocialNetworkList { get; private set; } = default!;
-    public DonationDetails Donation { get; private set; }
+    public SocialNetworkList? SocialNetworkList { get; private set; }
+    public DonationDetails? Donation { get; private set; }
     
     private Volunteer(){}
 
     public Volunteer(
-        //Guid id,
+        VolunteerId id,
+        HumanName name,
+        string email,
+        string description,
+        ushort yearsOfWorkExp,
+        string phoneNumber
+        //DonationDetails donation,
+        //SocialNetworkList socialNetworks
+        )
+    {
+        Id = id;
+        Name = name;
+        Email = email;
+        Description = description;
+        YearsOfWorkExp = yearsOfWorkExp;
+        PhoneNumber = phoneNumber;
+        //Donation = donation;
+        //SocialNetworkList = socialNetworks;
+    }
+
+    /*public static Result<Volunteer> Create(
         VolunteerId id,
         HumanName name,
         string email,
@@ -32,18 +51,8 @@ public class Volunteer : Entity
         DonationDetails donation,
         IEnumerable<Pet> pets,
         SocialNetworkList socialNetworks
-        )
+    )
     {
-        Id = id;
-        Name = name;
-        Email = email;
-        Description = description;
-        YearsOfWorkExp = yearsOfWorkExp;
-        PhoneNumber = phoneNumber;
-        Donation = donation;
-        Pets = pets.ToList().AsReadOnly();
-        SocialNetworkList = socialNetworks;
-    }
-    
-    
+        return new Volunteer(id, name, email, description, yearsOfWorkExp, phoneNumber, donation, pets, socialNetworks);
+    }*/
 }
