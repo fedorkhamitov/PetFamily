@@ -208,14 +208,6 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Property<Guid>("PetId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text");
-
                             b1.HasKey("PetId")
                                 .HasName("pk_pets");
 
@@ -349,14 +341,6 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Property<Guid>("VolunteerId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text");
-
                             b1.HasKey("VolunteerId");
 
                             b1.ToTable("volunteers");
@@ -368,14 +352,12 @@ namespace PetFamily.Infrastructure.Migrations
                                 .HasConstraintName("fk_volunteers_volunteers_id");
                         });
 
-                    b.Navigation("Donation")
-                        .IsRequired();
+                    b.Navigation("Donation");
 
                     b.Navigation("Name")
                         .IsRequired();
 
-                    b.Navigation("SocialNetworkList")
-                        .IsRequired();
+                    b.Navigation("SocialNetworkList");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Models.Species", b =>

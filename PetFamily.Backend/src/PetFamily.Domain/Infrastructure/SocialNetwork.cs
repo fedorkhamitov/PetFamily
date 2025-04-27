@@ -1,3 +1,26 @@
-﻿namespace PetFamily.Domain.Infrastructure;
+﻿using CSharpFunctionalExtensions;
 
-public record SocialNetwork(string Name, string Url);
+namespace PetFamily.Domain.Infrastructure;
+
+public record SocialNetwork
+{
+    public string Name { get; } = default!;
+    public string Url { get; } = default!;
+
+    private SocialNetwork()
+    { }
+
+    private SocialNetwork(string name, string url)
+    {
+        Name = name;
+        Url = url;
+    }
+
+    public Result<SocialNetwork, Error> Create(string name, string url)
+    {
+        if (string.IsNullOrWhiteSpace(name) ||
+            string.IsNullOrWhiteSpace(url))
+            return Errors.General.ValueIsRequired("Name and URL");
+        return new SocialNetwork(name, url);
+    }
+}
