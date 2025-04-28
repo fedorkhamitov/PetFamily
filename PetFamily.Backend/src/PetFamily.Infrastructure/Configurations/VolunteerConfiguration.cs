@@ -42,7 +42,16 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.Property(v => v.PhoneNumber)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGHT);
-        builder.OwnsOne(v => v.Donation, d => d.ToJson());
+        builder.OwnsOne(v => v.Donation, d =>
+        {
+            d.ToJson();
+            d.Property(dnt => dnt.Name)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGHT);
+            d.Property(dnt => dnt.Description)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGHT);
+        });
         builder.OwnsOne(v => v.SocialNetworkList, vbuilder =>
         {
             vbuilder.ToJson();

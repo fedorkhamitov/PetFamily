@@ -16,7 +16,7 @@ public record SocialNetwork
         Url = url;
     }
 
-    public Result<SocialNetwork, Error> Create(string name, string url)
+    public static Result<SocialNetwork, Error> Create(string name, string url)
     {
         if (string.IsNullOrWhiteSpace(name) ||
             string.IsNullOrWhiteSpace(url))
