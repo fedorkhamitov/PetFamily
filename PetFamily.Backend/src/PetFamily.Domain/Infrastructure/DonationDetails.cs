@@ -16,7 +16,7 @@ public record DonationDetails
         Description = description;
     }
 
-    public Result<DonationDetails, Error> Create(string name, string description)
+    public static Result<DonationDetails, Error> Create(string name, string description)
     {
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
             return Errors.General.ValueIsRequired("Name and Description");

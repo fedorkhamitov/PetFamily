@@ -26,9 +26,9 @@ public class Volunteer : Entity
         string email,
         string description,
         ushort yearsOfWorkExp,
-        string phoneNumber
-        //DonationDetails donation,
-        //SocialNetworkList socialNetworks
+        string phoneNumber,
+        DonationDetails? donation,
+        SocialNetworkList? socialNetworks
         )
     {
         Id = id;
@@ -37,8 +37,8 @@ public class Volunteer : Entity
         Description = description;
         YearsOfWorkExp = yearsOfWorkExp;
         PhoneNumber = phoneNumber;
-        //Donation = donation;
-        //SocialNetworkList = socialNetworks;
+        Donation = donation;
+        SocialNetworkList = socialNetworks;
     }
 
     /*public static Result<Volunteer> Create(
