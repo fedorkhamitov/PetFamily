@@ -13,7 +13,14 @@ public static class CustomValidators
         {
             Result<TValueObject, Error> result = factoryMethod(value);
             if (result.IsSuccess) return;
-            context.AddFailure(result.Error.Message);
+            context.AddFailure(result.Error.Serialize());
         });
+    }
+    
+    public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(
+        this IRuleBuilderOptions<T, TProperty> rule, string propertyName)
+    {
+        var error = Errors.General.ValueIsInvalid($"{propertyName}");
+        return rule.WithMessage(error.Serialize());
     }
 }
