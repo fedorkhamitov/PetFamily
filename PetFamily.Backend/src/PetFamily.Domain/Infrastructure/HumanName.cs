@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Extensions;
 
 namespace PetFamily.Domain.Infrastructure;
 
@@ -20,12 +21,15 @@ public record HumanName
 
     public static Result<HumanName, Error> Create(string firstName, string secondName, string lastName)
     {
-        if (string.IsNullOrWhiteSpace(firstName)
-            || string.IsNullOrWhiteSpace(secondName)
-            || string.IsNullOrWhiteSpace(lastName)
+        if (string.IsNullOrWhiteSpace(firstName) ||
+            string.IsNullOrWhiteSpace(secondName) ||
+            string.IsNullOrWhiteSpace(lastName) ||
+            !firstName.IsOnlyWords() ||
+            !secondName.IsOnlyWords() ||
+            !lastName.IsOnlyWords()
            )
         {
-            return Errors.General.ValueIsRequired("The fields");
+            return Errors.General.ValueIsRequired("HumanName fields");
         }
 
         return new HumanName(firstName, secondName, lastName);
