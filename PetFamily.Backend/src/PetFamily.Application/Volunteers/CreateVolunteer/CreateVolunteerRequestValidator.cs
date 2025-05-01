@@ -12,13 +12,16 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
     {
         RuleFor(c => c.VolunteerName).MustBeValueObject(h => 
             HumanName.Create(h.FirstName, h.SecondName, h.LastName));
-        RuleFor(c => c.Email).EmailAddress();
-        RuleFor(c => c.Description).NotEmpty();
-        RuleFor(c => c.Description.Length).LessThan(Constants.MAX_HIGH_TEXT_LENGHT);
-        RuleFor(c => c.YearsOfWorkExp).LessThan((ushort)Constants.MAX_LOW_TEXT_LENGHT);
+        RuleFor(c => c.Email).EmailAddress()
+            .WithError("Email");
+        RuleFor(c => c.Description).NotEmpty().WithError("Description");
+        RuleFor(c => c.Description.Length).LessThan(Constants.MAX_HIGH_TEXT_LENGHT)
+            .WithError("Description.Length");
+        RuleFor(c => c.YearsOfWorkExp).LessThan((ushort)Constants.MAX_LOW_TEXT_LENGHT)
+            .WithError("YearsOfWorkExp");
         RuleFor(c => c.PhoneNumber)
             .Must(pn => pn.Length == 10 && !Regex.IsMatch(pn, @"\d+$"))
-            .WithMessage("PhoneNumber invalid");
+            .WithError("PhoneNumber");
         RuleFor(c => c.DonationDetails)
             .MustBeValueObject(d => DonationDetails.Create(d.Name, d.Description));
         RuleForEach(c => c.SocialNetworks).MustBeValueObject(s =>

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Runtime.InteropServices.JavaScript;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Api.Extensions;
 using PetFamily.Api.Response;
@@ -21,14 +22,12 @@ public class VolunteerController : ControllerBase
         if (validationResult.IsValid == false)
         {
             var validationErrors = validationResult.Errors;
-            var responseErrors = validationErrors.Select(validationError =>
-                new ResponseError(
-                    validationError.ErrorCode,
-                    validationError.ErrorMessage,
-                    validationError.PropertyName));
-            /*var errors = from validationError in validationErrors
-                let error = Error.Validation(validationError.ErrorCode, validationError.ErrorMessage)
-                select new ResponseError(error.Code, error.Message, validationError.PropertyName);*/
+            
+            var responseErrors = from validationError in validationErrors
+                let errorMessage = validationError.ErrorMessage
+                let error = Error.Deserialize(errorMessage)
+                select new ResponseError(error.Code, error.Message, validationError.PropertyName);
+            
             var envelope = Envelope.Error(responseErrors);
             return BadRequest(envelope);
         }
