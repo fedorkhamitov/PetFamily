@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Volunteers.CreateVolunteer;
+using PetFamily.Application.Volunteers.Create;
 using PetFamily.Infrastructure.Repositories;
 
 namespace PetFamily.Infrastructure;

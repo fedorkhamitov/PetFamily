@@ -2,7 +2,7 @@
 using PetFamily.Domain.Infrastructure;
 using PetFamily.Domain.Models;
 
-namespace PetFamily.Application.Volunteers.CreateVolunteer;
+namespace PetFamily.Application.Volunteers.Create;
 
 public class CreateVolunteerHandler
 {
