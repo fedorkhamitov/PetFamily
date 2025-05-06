@@ -5,6 +5,7 @@ using PetFamily.Api.Extensions;
 using PetFamily.Api.Response;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain.Infrastructure;
+using Serilog;
 
 namespace PetFamily.Api.Controllers;
 [ApiController]
@@ -31,7 +32,9 @@ public class VolunteerController : ControllerBase
             var envelope = Envelope.Error(responseErrors);
             return BadRequest(envelope);
         }
+
         var result = await handler.Handle(request, cancellationToken);
+        Log.Information("Created volunteer {0}", result.Value);
         return result.IsFailure ? result.Error.ToResponse() : Ok(Envelope.Ok(result.Value));
     }
 }

@@ -20,7 +20,7 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
         RuleFor(c => c.YearsOfWorkExp).LessThan((ushort)Constants.MAX_LOW_TEXT_LENGHT)
             .WithError("YearsOfWorkExp");
         RuleFor(c => c.PhoneNumber)
-            .Must(pn => pn.Length == 10 && !Regex.IsMatch(pn, @"\d+$"))
+            .Must(pn => pn.Length == 10 && Regex.IsMatch(pn, @"\d+$"))
             .WithError("PhoneNumber");
         RuleFor(c => c.DonationDetails)
             .MustBeValueObject(d => DonationDetails.Create(d.Name, d.Description));
