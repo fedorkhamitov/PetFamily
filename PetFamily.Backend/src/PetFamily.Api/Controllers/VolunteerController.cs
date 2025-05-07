@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetFamily.Api.Extensions;
 using PetFamily.Api.Response;
 using PetFamily.Application.Volunteers.Create;
+using PetFamily.Application.Volunteers.Delete;
 using PetFamily.Application.Volunteers.UpdateDonationDetails;
 using PetFamily.Application.Volunteers.UpdateMainInfo;
 using PetFamily.Application.Volunteers.UpdateSocialNetworks;
@@ -10,7 +11,7 @@ using PetFamily.Application.Volunteers.UpdateSocialNetworks;
 namespace PetFamily.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("volunteer")]
 public class VolunteerController : ControllerBase
 {
     [HttpPost]
@@ -27,7 +28,7 @@ public class VolunteerController : ControllerBase
         return result.IsFailure ? result.Error.ToResponse() : Ok(Envelope.Ok(result.Value));
     }
 
-    [HttpPut("/{id:guid}/main-info")]
+    [HttpPut("{id:guid}/main-info")]
     public async Task<ActionResult<Guid>> UpdateMainInfo
     (
         [FromRoute] Guid id,
@@ -45,7 +46,7 @@ public class VolunteerController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpPut("/{id:guid}/social-networks")]
+    [HttpPut("{id:guid}/social-networks")]
     public async Task<ActionResult<Guid>> UpdateSocialNetworks(
         [FromRoute] Guid id,
         [FromServices] UpdateSocialNetworksHandler handler,
@@ -61,7 +62,7 @@ public class VolunteerController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpPut("/{id:guid}/donation-details")]
+    [HttpPut("{id:guid}/donation-details")]
     public async Task<ActionResult<Guid>> UpdateDonationDetails(
         [FromRoute] Guid id,
         [FromServices] UpdateDonationDetailsHandler handler,
@@ -70,6 +71,37 @@ public class VolunteerController : ControllerBase
         CancellationToken cancellationToken)
     {
         var request = new UpdateDonationDetailsRequest(id, dto);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ValidationResultErrorEnvelope());
+        var result = await handler.Handle(request, cancellationToken);
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<Guid>> HardDelete(
+        [FromRoute] Guid id,
+        [FromServices] HardDeleteHandler handler,
+        [FromServices] IValidator<DeleteRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        var request = new DeleteRequest(id);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ValidationResultErrorEnvelope());
+        var result = await handler.Handle(request, cancellationToken);
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("{id:guid}/soft")]
+    public async Task<ActionResult<Guid>> SoftDelete(
+        [FromRoute] Guid id,
+        [FromServices] SoftDeleteHandler handler,
+        [FromServices] IValidator<DeleteRequest> validator,
+        CancellationToken cancellationToken
+    )
+    {
+        var request = new DeleteRequest(id);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ValidationResultErrorEnvelope());

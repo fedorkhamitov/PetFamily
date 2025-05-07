@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Volunteers.Create;
 using PetFamily.Domain.Infrastructure;
 
 namespace PetFamily.Application.Volunteers.UpdateDonationDetails;
@@ -10,7 +9,8 @@ public class UpdateDonationDetailsHandler(IVolunteersRepository volunteersReposi
 {
     public async Task<Result<Guid, Error>> Handle(
         UpdateDonationDetailsRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+        )
     {
         var volunteer = await volunteersRepository
             .GetById(VolunteerId.Create(request.Id), cancellationToken);

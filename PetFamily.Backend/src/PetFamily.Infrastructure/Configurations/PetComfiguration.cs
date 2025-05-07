@@ -44,5 +44,8 @@ public class PetComfiguration : IEntityTypeConfiguration<Pet>
         builder.OwnsOne(p => p.DonationDetails, d => d.ToJson());
         builder.Property(p => p.CreatedDate).IsRequired();
         builder.Property(p => p.HelpStatus).IsRequired();
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
     }
 }

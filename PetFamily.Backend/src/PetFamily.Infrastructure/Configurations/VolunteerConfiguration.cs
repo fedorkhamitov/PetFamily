@@ -38,7 +38,8 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .IsRequired();
         builder.HasMany(v => v.Pets)
             .WithOne()
-            .HasForeignKey("volunteer_id");
+            .HasForeignKey("volunteer_id")
+            .OnDelete(DeleteBehavior.Cascade);
         builder.Property(v => v.PhoneNumber)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGHT);
@@ -65,5 +66,8 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGHT);
             });
         });
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using PetFamily.Application.Volunteers;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Domain.Infrastructure;
 using PetFamily.Domain.Models;
@@ -31,8 +32,22 @@ public class VolunteersRepository : IVolunteersRepository
 
     public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken)
     {
-        _dbContext.Attach(volunteer);
+        _dbContext.Volunteers.Attach(volunteer);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return volunteer.Id.Value;
     }
+
+    public async Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Volunteers.Remove(volunteer);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return volunteer.Id.Value;
+    }
+    
+    /*public async Task<Guid> SoftDelete(Volunteer volunteer, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Volunteers.Remove(volunteer);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return volunteer.Id.Value;
+    }*/
 }

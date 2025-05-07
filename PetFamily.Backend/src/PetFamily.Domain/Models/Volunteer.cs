@@ -5,15 +5,16 @@ namespace PetFamily.Domain.Models;
 
 public class Volunteer : Entity
 {
+    private bool _isDeleted = false;
     public VolunteerId Id { get; private set; }
     public HumanName Name { get; private set; } = default!;
     public string Email { get; private set; } = default!;
     public string Description { get; private set; } = default!;
     public ushort YearsOfWorkExp { get; private set; }
-    public IReadOnlyList<Pet> Pets { get; private set; } = default!;
-    public int FoundHomePetsCount => Pets.Count(p => p.HelpStatus == HelpStatus.FoundHome);
-    public int LookingHomePetsCount => Pets.Count(p => p.HelpStatus == HelpStatus.LookingHome);
-    public int NeedHelpPetsCount => Pets.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
+    public IReadOnlyList<Pet>? Pets { get; private set; }
+    public int FoundHomePetsCount => Pets!.Count(p => p.HelpStatus == HelpStatus.FoundHome);
+    public int LookingHomePetsCount => Pets!.Count(p => p.HelpStatus == HelpStatus.LookingHome);
+    public int NeedHelpPetsCount => Pets!.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
     public string PhoneNumber { get; private set; } = default!;
     public SocialNetworkList? SocialNetworkList { get; private set; }
     public DonationDetails? Donation { get; private set; }
@@ -64,5 +65,24 @@ public class Volunteer : Entity
     public void UpdateDonationDetails(DonationDetails donationDetails)
     {
         Donation = donationDetails;
+    }
+
+    public void SoftDelete()
+    {
+        _isDeleted = true;
+        if (Pets is null) return;
+        foreach (var pet in Pets)
+        {
+            pet.SoftDelete();
+        }
+    }
+    public void Restore()
+    {
+        _isDeleted = false;
+        if (Pets is null) return;
+        foreach (var pet in Pets)
+        {
+            pet.Restore();
+        }
     }
 }

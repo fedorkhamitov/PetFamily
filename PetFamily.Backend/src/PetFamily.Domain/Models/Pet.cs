@@ -5,6 +5,7 @@ namespace PetFamily.Domain.Models;
 
 public class Pet : Entity
 {
+    private bool _isDeleted = false;
     public new Guid Id { get; private set; }
     public string Name { get; private set; } = default!;
     public string Description { get; private set; } = default!;
@@ -54,4 +55,6 @@ public class Pet : Entity
         BirthDate = birthDate;
         DonationDetails = donationDetails;
     }
+    public void SoftDelete() => _isDeleted = true;
+    public void Restore() => _isDeleted = false;
 }
