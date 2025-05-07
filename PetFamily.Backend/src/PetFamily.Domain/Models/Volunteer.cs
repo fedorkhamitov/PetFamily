@@ -41,18 +41,28 @@ public class Volunteer : Entity
         SocialNetworkList = socialNetworks;
     }
 
-    /*public static Result<Volunteer> Create(
-        VolunteerId id,
+    public void UpdateMainInfo(
         HumanName name,
         string email,
         string description,
         ushort yearsOfWorkExp,
-        string phoneNumber,
-        DonationDetails donation,
-        IEnumerable<Pet> pets,
-        SocialNetworkList socialNetworks
-    )
+        string phoneNumber)
     {
-        return new Volunteer(id, name, email, description, yearsOfWorkExp, phoneNumber, donation, pets, socialNetworks);
-    }*/
+        Name = name;
+        Email = email;
+        Description = description;
+        YearsOfWorkExp = yearsOfWorkExp;
+        PhoneNumber = phoneNumber;
+    }
+
+    public void UpdateSocialNetworks(IEnumerable<SocialNetwork> socialNetworks)
+    {
+        var socialNetworkList = SocialNetworkList.Create(socialNetworks.ToList()).Value;
+        SocialNetworkList = socialNetworkList;
+    }
+
+    public void UpdateDonationDetails(DonationDetails donationDetails)
+    {
+        Donation = donationDetails;
+    }
 }

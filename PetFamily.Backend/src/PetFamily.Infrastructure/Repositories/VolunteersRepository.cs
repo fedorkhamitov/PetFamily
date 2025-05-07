@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Volunteers.CreateVolunteer;
+using PetFamily.Application.Volunteers.Create;
 using PetFamily.Domain.Infrastructure;
 using PetFamily.Domain.Models;
 
@@ -20,11 +20,19 @@ public class VolunteersRepository : IVolunteersRepository
         return volunteer.Id.Value;
     }
 
-    public async Task<Result<Volunteer>> GetById(VolunteerId volunteerId)
+    public async Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken)
     {
         var volunteer = await _dbContext.Volunteers
             .Include(v => v.Pets)
-            .FirstOrDefaultAsync(v => v.Id == volunteerId);
+            .ThenInclude(p => p.SpeciesInfo)
+            .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
         return volunteer;
+    }
+
+    public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken)
+    {
+        _dbContext.Attach(volunteer);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return volunteer.Id.Value;
     }
 }
