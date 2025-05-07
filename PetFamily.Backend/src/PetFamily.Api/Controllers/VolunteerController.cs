@@ -6,8 +6,6 @@ using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.UpdateDonationDetails;
 using PetFamily.Application.Volunteers.UpdateMainInfo;
 using PetFamily.Application.Volunteers.UpdateSocialNetworks;
-using PetFamily.Domain.Infrastructure;
-using Serilog;
 
 namespace PetFamily.Api.Controllers;
 
@@ -26,7 +24,6 @@ public class VolunteerController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ValidationResultErrorEnvelope());
         var result = await handler.Handle(request, cancellationToken);
-        Log.Information("Created volunteer {0}", result.Value);
         return result.IsFailure ? result.Error.ToResponse() : Ok(Envelope.Ok(result.Value));
     }
 
@@ -45,7 +42,6 @@ public class VolunteerController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ValidationResultErrorEnvelope());
         var result = await handler.Handle(request, cancellationToken);
-        Log.Information("Volunteer id:{0} was updated", id);
         return Ok(result.Value);
     }
 
@@ -62,7 +58,6 @@ public class VolunteerController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ValidationResultErrorEnvelope());
         var result = await handler.Handle(request, cancellationToken);
-        Log.Information("Volunteer id:{0} was updated", id);
         return Ok(result.Value);
     }
 
@@ -79,7 +74,6 @@ public class VolunteerController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ValidationResultErrorEnvelope());
         var result = await handler.Handle(request, cancellationToken);
-        Log.Information("Volunteer id:{0} was updated", id);
         return Ok(result.Value);
     }
 }
