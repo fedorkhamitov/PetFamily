@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Extensions;
 
-namespace PetFamily.Domain.Infrastructure;
+namespace PetFamily.Domain.Share;
 
 public record HumanName
 {

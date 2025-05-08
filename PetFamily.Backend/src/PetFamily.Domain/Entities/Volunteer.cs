@@ -1,11 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Infrastructure;
+using PetFamily.Domain.Share;
 
-namespace PetFamily.Domain.Models;
+namespace PetFamily.Domain.Entities;
 
-public class Volunteer : Entity
+public class Volunteer : SoftDeletableEntity
 {
-    private bool _isDeleted = false;
     public VolunteerId Id { get; private set; }
     public HumanName Name { get; private set; } = default!;
     public string Email { get; private set; } = default!;
@@ -67,22 +66,23 @@ public class Volunteer : Entity
         Donation = donationDetails;
     }
 
-    public void SoftDelete()
+    public override void Delete()
     {
-        _isDeleted = true;
+        base.Delete();
         if (Pets is null) return;
         foreach (var pet in Pets)
         {
-            pet.SoftDelete();
+            pet.Delete();
         }
     }
-    public void Restore()
+
+    public override void Restore()
     {
-        _isDeleted = false;
+        base.Restore();
         if (Pets is null) return;
         foreach (var pet in Pets)
         {
             pet.Restore();
-        }
+        } 
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
 using CSharpFunctionalExtensions;
-using PetFamily.Domain.Infrastructure;
 
 namespace PetFamily.Api.Response;
 

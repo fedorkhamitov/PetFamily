@@ -86,10 +86,12 @@ public class VolunteerController : ControllerBase
         CancellationToken cancellationToken)
     {
         var request = new DeleteRequest(id);
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.ValidationResultErrorEnvelope());
+        
         var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
         return Ok(result.Value);
     }
 
@@ -97,15 +99,31 @@ public class VolunteerController : ControllerBase
     public async Task<ActionResult<Guid>> SoftDelete(
         [FromRoute] Guid id,
         [FromServices] SoftDeleteHandler handler,
-        [FromServices] IValidator<DeleteRequest> validator,
-        CancellationToken cancellationToken
-    )
+        CancellationToken cancellationToken)
     {
         var request = new DeleteRequest(id);
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.ValidationResultErrorEnvelope());
+        
         var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
+        return Ok(result.Value);
+    }
+
+    [HttpPut("{id:guid}/active")]
+    public async Task<ActionResult<Guid>> Restore(
+        [FromRoute] Guid id,
+        [FromServices] RestoreHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var request = new DeleteRequest(id);
+        
+        var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
         return Ok(result.Value);
     }
 }

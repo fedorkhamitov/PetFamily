@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using PetFamily.Domain.Infrastructure;
-using PetFamily.Domain.Models;
+using PetFamily.Domain.Entities;
+using PetFamily.Domain.Share;
 
 namespace PetFamily.Application.Volunteers.Create;
 
@@ -30,8 +30,7 @@ public class CreateVolunteerHandler
         var name = HumanName.Create(
             request.VolunteerName.FirstName,
             request.VolunteerName.SecondName,
-            request.VolunteerName.LastName
-            ).Value;
+            request.VolunteerName.LastName).Value;
         var volunteer = new Volunteer(
             volunteerId,
             name,
@@ -40,8 +39,7 @@ public class CreateVolunteerHandler
             request.YearsOfWorkExp,
             request.PhoneNumber,
             DonationDetails.Create(request.DonationDetails.Name, request.DonationDetails.Description).Value,
-            socialNetworkList
-            );
+            socialNetworkList);
         await _volunteersRepository.Add(volunteer, cancellationToken);
         _logger.LogInformation("Created new voluteer id: {0}, name: {1},{2}, phone: {3}",
             volunteer.Id.Value, volunteer.Name.FirstName, volunteer.Name.LastName, volunteer.PhoneNumber);

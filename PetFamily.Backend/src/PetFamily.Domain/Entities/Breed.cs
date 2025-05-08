@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetFamily.Domain.Models;
+namespace PetFamily.Domain.Entities;
 
 public class Breed : Entity
 {

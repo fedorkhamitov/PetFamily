@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
-using PetFamily.Domain.Infrastructure;
+using PetFamily.Domain.Share;
 
 namespace PetFamily.Application.Validation;
 

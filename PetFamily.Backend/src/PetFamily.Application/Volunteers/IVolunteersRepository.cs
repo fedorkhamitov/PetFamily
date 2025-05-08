@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Infrastructure;
-using PetFamily.Domain.Models;
+using PetFamily.Domain.Entities;
+using PetFamily.Domain.Share;
 
 namespace PetFamily.Application.Volunteers;
 
@@ -10,5 +10,4 @@ public interface IVolunteersRepository
     Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken = default);
     Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default);
     Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken = default);
-    //Task<Guid> SoftDelete(Volunteer volunteer, CancellationToken cancellationToken = default);
 }

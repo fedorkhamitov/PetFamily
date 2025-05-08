@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetFamily.Domain.Infrastructure;
+namespace PetFamily.Domain.Share;
 
 public record Address
 {

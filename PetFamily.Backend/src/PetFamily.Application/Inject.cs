@@ -18,6 +18,7 @@ public static class Inject
         services.AddScoped<UpdateDonationDetailsHandler>();
         services.AddScoped<HardDeleteHandler>();
         services.AddScoped<SoftDeleteHandler>();
+        services.AddScoped<RestoreHandler>();
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
         return services;
     }
