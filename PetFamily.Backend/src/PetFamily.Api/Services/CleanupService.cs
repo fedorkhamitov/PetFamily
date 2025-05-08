@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using PetFamily.Infrastructure;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using PetFamily.Infrastructure;
 
 namespace PetFamily.Application.Services;
 
@@ -20,7 +14,8 @@ public class CleanupService : BackgroundService
     {
         _serviceScopeFactory = serviceScopeFactory;
         _cleanupInterval = TimeSpan.FromHours(24);
-        _entityLifetime = TimeSpan.FromDays(30);
+        var lifetimeDays = configuration.GetValue<int>("EntityLifetimeDays", 30);
+        _entityLifetime = TimeSpan.FromDays(lifetimeDays);
         _logger = logger;
     }
     
