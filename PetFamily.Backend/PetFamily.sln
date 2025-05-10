@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{90DA84FE-3929-4C2B-8B2F-43BCE4476B62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Tests", "PetFamily.Tests\PetFamily.Tests.csproj", "{2714F6FB-B09F-48EE-940D-A5B565558700}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,5 +45,12 @@ Global
 		{6FC7956A-AED4-4D7A-B46F-F5EC8A900A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FC7956A-AED4-4D7A-B46F-F5EC8A900A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FC7956A-AED4-4D7A-B46F-F5EC8A900A56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2714F6FB-B09F-48EE-940D-A5B565558700}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2714F6FB-B09F-48EE-940D-A5B565558700}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2714F6FB-B09F-48EE-940D-A5B565558700}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2714F6FB-B09F-48EE-940D-A5B565558700}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2714F6FB-B09F-48EE-940D-A5B565558700} = {90DA84FE-3929-4C2B-8B2F-43BCE4476B62}
 	EndGlobalSection
 EndGlobal

@@ -10,6 +10,7 @@ public class Species : Entity
     private Species(){}
     public Species(string name, IEnumerable<Breed> breeds)
     {
+        Id = Guid.NewGuid();
         Name = name;
         Breeds = breeds.ToList().AsReadOnly();
     }

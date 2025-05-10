@@ -49,24 +49,30 @@ public record Address
             return Errors.General.ValueIsRequired("ZipCode");
         if (!zipCode.All(char.IsDigit))
             return Errors.General.ValueIsInvalid("ZipCode");
+        
         if (string.IsNullOrWhiteSpace(country))
             return Errors.General.ValueIsRequired("Country");
-        if (country.All(char.IsLetter))
+        if (!country.All(char.IsLetter))
             return Errors.General.ValueIsInvalid("Country");
+        
         if (string.IsNullOrWhiteSpace(state))
             return Errors.General.ValueIsRequired("State");
-        if (state.All(char.IsLetter))
+        if (!state.All(char.IsLetter))
             return Errors.General.ValueIsInvalid("State");
+        
         if (string.IsNullOrWhiteSpace(city))
             return Errors.General.ValueIsRequired("City");
-        if (city.All(char.IsLetter))
+        if (!city.All(char.IsLetter))
             return Errors.General.ValueIsInvalid("City");
+        
         if (string.IsNullOrWhiteSpace(streetName))
             return Errors.General.ValueIsRequired("StreetName");
+        
         if (string.IsNullOrWhiteSpace(streetNumber))
             return Errors.General.ValueIsRequired("StreetNumber");
         if (!streetNumber.All(char.IsDigit))
             return Errors.General.ValueIsInvalid("StreetNumber");
+        
         if (string.IsNullOrWhiteSpace(apartment))
             return Errors.General.ValueIsInvalid("Apartment");
         if (!apartment.All(char.IsDigit))

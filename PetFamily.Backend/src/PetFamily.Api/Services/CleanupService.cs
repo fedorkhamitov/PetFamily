@@ -1,6 +1,6 @@
 ﻿using PetFamily.Infrastructure;
 
-namespace PetFamily.Application.Services;
+namespace PetFamily.Api.Services;
 
 public class CleanupService : BackgroundService
 {
@@ -15,7 +15,7 @@ public class CleanupService : BackgroundService
         _serviceScopeFactory = serviceScopeFactory;
         _cleanupInterval = TimeSpan.FromHours(24);
         var lifetimeDays = configuration.GetValue<int>("EntityLifetimeDays", 30);
-        _entityLifetime = TimeSpan.FromDays(lifetimeDays);
+        _entityLifetime = TimeSpan.FromMilliseconds(lifetimeDays);
         _logger = logger;
     }
     

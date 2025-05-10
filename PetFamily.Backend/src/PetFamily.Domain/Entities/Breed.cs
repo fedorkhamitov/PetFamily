@@ -13,6 +13,7 @@ public class Breed : Entity
 
     public Breed(string name)
     {
+        Id = Guid.NewGuid();
         Name = name;
     }
 }

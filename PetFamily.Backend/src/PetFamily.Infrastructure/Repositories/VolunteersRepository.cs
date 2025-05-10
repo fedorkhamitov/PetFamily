@@ -25,6 +25,7 @@ public class VolunteersRepository : IVolunteersRepository
     public async Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken)
     {
         var volunteer = await _dbContext.Volunteers
+            .Include(v => v.Pets)
             .SingleAsync(v => v.Id == volunteerId, cancellationToken);
         
         return volunteer;
