@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-
-namespace PetFamily.Domain.Infrastructure;
+﻿namespace PetFamily.Domain.Share;
 
 public record Error
 {

@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetFamily.Domain.Models;
+namespace PetFamily.Domain.Entities;
 
 public class Breed : Entity
 {
@@ -13,6 +13,7 @@ public class Breed : Entity
 
     public Breed(string name)
     {
+        Id = Guid.NewGuid();
         Name = name;
     }
 }

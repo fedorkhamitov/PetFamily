@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 using PetFamily.Api.Response;
-using PetFamily.Domain.Infrastructure;
+using PetFamily.Domain.Share;
 using Serilog;
 
 namespace PetFamily.Api.Extensions;

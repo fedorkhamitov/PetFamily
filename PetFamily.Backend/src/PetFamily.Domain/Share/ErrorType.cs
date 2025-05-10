@@ -1,4 +1,4 @@
-﻿namespace PetFamily.Domain.Infrastructure;
+﻿namespace PetFamily.Domain.Share;
 
 public enum ErrorType
 {

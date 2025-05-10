@@ -1,13 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Infrastructure;
+using PetFamily.Domain.Share;
 
-namespace PetFamily.Domain.Models;
+namespace PetFamily.Domain.Entities;
 
-public class Pet : Entity
+public class Pet : SoftDeletableEntity
 {
     public new Guid Id { get; private set; }
     public string Name { get; private set; } = default!;
     public string Description { get; private set; } = default!;
+    public Position Position { get; private set; }
     public bool IsSterilized { get; private set; }
     public bool IsVaccinated { get; private set; }
     public SpeciesInfo SpeciesInfo { get; private set; }
@@ -19,7 +20,7 @@ public class Pet : Entity
     public DateTime BirthDate { get; private set; }
     public DonationDetails DonationDetails { get; private set; } = default!;
     public DateTime CreatedDate { get; private set; }
-    public HelpStatus HelpStatus { get; private set; } = default;
+    public HelpStatus HelpStatus { get; private set; }
     
     private Pet(){}
 
@@ -53,5 +54,28 @@ public class Pet : Entity
         PhoneNumber = phoneNumber;
         BirthDate = birthDate;
         DonationDetails = donationDetails;
+    }
+
+    public void SetPosition(Position position) 
+        => Position = position;
+
+    public UnitResult<Error> MoveForward()
+    {
+        var newPosition = Position.Forward();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+        return Result.Success<Error>();
+    }
+    
+    public UnitResult<Error> MoveBack()
+    {
+        var newPosition = Position.Back();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+        return Result.Success<Error>();
     }
 }
