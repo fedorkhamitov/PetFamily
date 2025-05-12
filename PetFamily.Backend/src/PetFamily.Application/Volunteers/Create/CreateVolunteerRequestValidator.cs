@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using FluentValidation;
 using PetFamily.Application.Validation;
-using PetFamily.Domain.Infrastructure;
+using PetFamily.Domain.Share;
 
 namespace PetFamily.Application.Volunteers.Create;
 

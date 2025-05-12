@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetFamily.Api.Response;
-using PetFamily.Domain.Infrastructure;
+using PetFamily.Domain.Share;
+
 namespace PetFamily.Api.Extensions;
 
 public static class ResponseExtensions

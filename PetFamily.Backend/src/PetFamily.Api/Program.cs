@@ -1,4 +1,5 @@
 using PetFamily.Api.Extensions;
+using PetFamily.Api.Services;
 using PetFamily.Application;
 using PetFamily.Infrastructure;
 using Serilog;
@@ -22,6 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure()
     .AddApplication();
+builder.Services.AddHostedService<CleanupService>();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();
