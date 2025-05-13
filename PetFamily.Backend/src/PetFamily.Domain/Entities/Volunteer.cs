@@ -101,22 +101,17 @@ public class Volunteer : SoftDeletableEntity
         return Result.Success<Error>();
     }
 
-    public Result<Pet,Error> GetPetById(Guid petId)
+    public Result<Pet, Error> GetPetById(Guid petId)
     {
-        try
-        {
-            return Pets.Single(p => p.Id == petId);
-        }
-        catch (Exception e)
-        {
-            return Errors.General.NotFound(petId);
-        }
+        var result = Pets.FirstOrDefault(p => p.Id == petId);
+        if (result is null) return Errors.General.NotFound(petId);
+        return result;
     }
 
     public UnitResult<Error> MovePet(Pet pet, Position newPosition)
     {
         var currentPosition = pet.Position;
-        
+
         if (newPosition == currentPosition || Pets.Count == 1)
             return Result.Success<Error>();
 
@@ -129,9 +124,9 @@ public class Volunteer : SoftDeletableEntity
         var moveResult = MovePetsBetweenPositions(currentPosition, newPosition);
         if (moveResult.IsFailure)
             return moveResult.Error;
-        
+
         pet.SetPosition(newPosition);
-        
+
         return Result.Success<Error>();
     }
 
@@ -165,7 +160,7 @@ public class Volunteer : SoftDeletableEntity
 
         return Result.Success<Error>();
     }
-    
+
     private Result<Position, Error> AdjustNewPositionIfOutOfRange(Position newPosition)
     {
         if (newPosition.Value < Pets.Count)
@@ -173,7 +168,7 @@ public class Volunteer : SoftDeletableEntity
 
         if (newPosition.Value < Position.First.Value)
             return Position.First;
-        
+
         var lastPosition = Position.Create(Pets.Count());
         if (lastPosition.IsFailure)
             return lastPosition.Error;

@@ -21,8 +21,10 @@ builder.Services.AddSerilog();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddInfrastructure()
+
+builder.Services.AddInfrastructure(builder.Configuration)
     .AddApplication();
+
 builder.Services.AddHostedService<CleanupService>();
 
 var app = builder.Build();
