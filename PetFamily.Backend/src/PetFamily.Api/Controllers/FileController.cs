@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Minio;
 using PetFamily.Api.Extensions;
+using PetFamily.Api.Response;
 using PetFamily.Application.FileProvider;
 using PetFamily.Application.Modules;
 using PetFamily.Domain.Share;
@@ -25,29 +26,31 @@ public class FileController : ControllerBase
     {
         await using var stream = file.OpenReadStream();
 
-        var fileMetaData = new MinioFileMetaData(Constants.BUCKET_NAME, Guid.NewGuid().ToString());
+        var fileName = Guid.NewGuid().ToString();
 
-        var result = await _fileProvider.UploadFile(stream, fileMetaData, cancellationToken);
+        var fileContent = new FileContent(stream, fileName);
+        
+        var result = await _fileProvider.UploadFile([ fileContent ], Constants.PHOTOS_BUCKET_NAME, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
-        return Ok(result.Value);
+        return Ok();
     }
 
     [HttpDelete("{fileName:guid}")]
     public async Task<ActionResult> RemoveFile([FromRoute] Guid fileName, CancellationToken cancellationToken)
     {
-        var fileMetaData = new MinioFileMetaData(Constants.BUCKET_NAME, fileName.ToString());
+        var fileMetaData = new MinioFileMetaData(Constants.PHOTOS_BUCKET_NAME, fileName.ToString());
 
-        var result = await _fileProvider.DeleteFile(fileMetaData, cancellationToken);
+        var result = await _fileProvider.DeleteFile([fileMetaData], cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
-        return Ok(result.Value);
+        return Ok(Envelope.Ok());
     }
 
     [HttpGet("{fileName:guid}")]
     public async Task<ActionResult> GetByName([FromRoute] Guid fileName, CancellationToken cancellationToken)
     {
-        var fileMetaData = new MinioFileMetaData(Constants.BUCKET_NAME, fileName.ToString());
+        var fileMetaData = new MinioFileMetaData(Constants.PHOTOS_BUCKET_NAME, fileName.ToString());
 
         var result = await _fileProvider.GetFileByObjectName(fileMetaData, cancellationToken);
         if (result.IsFailure)

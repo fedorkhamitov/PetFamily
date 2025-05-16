@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Share;
 
 namespace PetFamily.Domain.Entities;
@@ -11,7 +10,8 @@ public class Volunteer : SoftDeletableEntity
     public string Email { get; private set; } = default!;
     public string Description { get; private set; } = default!;
     public ushort YearsOfWorkExp { get; private set; }
-    public List<Pet> Pets { get; private set; } = [];
+    public IReadOnlyList<Pet> Pets => _pets;
+    private readonly List<Pet> _pets = [];
     public int FoundHomePetsCount => Pets!.Count(p => p.HelpStatus == HelpStatus.FoundHome);
     public int LookingHomePetsCount => Pets!.Count(p => p.HelpStatus == HelpStatus.LookingHome);
     public int NeedHelpPetsCount => Pets!.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
@@ -97,7 +97,7 @@ public class Volunteer : SoftDeletableEntity
 
         pet.SetPosition(position.Value);
 
-        Pets.Add(pet);
+        _pets.Add(pet);
         return Result.Success<Error>();
     }
 

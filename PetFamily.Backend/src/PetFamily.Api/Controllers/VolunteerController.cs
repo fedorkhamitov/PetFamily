@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Api.Extensions;
 using PetFamily.Api.Response;
+using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.Delete;
 using PetFamily.Application.Volunteers.UpdateDonationDetails;
@@ -124,6 +125,43 @@ public class VolunteerController : ControllerBase
         if (result.IsFailure)
             return result.Error.ToResponse();
         
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{id:guid}/newpet")]
+    public async Task<ActionResult<Guid>> AddPet(
+        [FromRoute] Guid id,
+        [FromBody] AddPetRequest request,
+        [FromServices] AddPetHandler handler,
+        [FromServices] IValidator<AddPetRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ValidationResultErrorEnvelope());
+        
+        var command = new AddPetCommand(
+            id,
+            request.Name,
+            request.Description,
+            request.IsSterilized,
+            request.IsVaccinated,
+            request.SpeciesId,
+            request.BreedId,
+            request.Color,
+            request.Address,
+            request.Weight,
+            request.Height,
+            request.PhoneNumber,
+            request.BirthDate,
+            request.DonationDetails,
+            request.Position);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
         return Ok(result.Value);
     }
 }

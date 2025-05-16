@@ -1,3 +1,4 @@
+using FluentValidation;
 using PetFamily.Api.Extensions;
 using PetFamily.Api.Services;
 using PetFamily.Application;
@@ -22,6 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddInfrastructure(builder.Configuration)
     .AddApplication();
 

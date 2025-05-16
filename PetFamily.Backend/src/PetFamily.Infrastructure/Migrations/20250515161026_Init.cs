@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetFamily.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,8 +35,10 @@ namespace PetFamily.Infrastructure.Migrations
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     years_of_work_exp = table.Column<int>(type: "integer", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    donation = table.Column<string>(type: "jsonb", nullable: false),
-                    social_network_list = table.Column<string>(type: "jsonb", nullable: false)
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deletion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    donation = table.Column<string>(type: "jsonb", nullable: true),
+                    social_network_list = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,6 +70,7 @@ namespace PetFamily.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    position = table.Column<int>(type: "integer", nullable: false),
                     is_sterilized = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -79,7 +82,10 @@ namespace PetFamily.Infrastructure.Migrations
                     birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     help_status = table.Column<int>(type: "integer", nullable: false),
+                    files = table.Column<string>(type: "jsonb", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deletion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     address = table.Column<string>(type: "jsonb", nullable: false),
                     donation_details = table.Column<string>(type: "jsonb", nullable: false)
                 },
@@ -90,7 +96,8 @@ namespace PetFamily.Infrastructure.Migrations
                         name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
                         principalTable: "volunteers",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
