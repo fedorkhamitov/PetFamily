@@ -8,7 +8,9 @@ namespace PetFamily.Infrastructure;
 
 public class AppDbContext(IConfiguration configuration) : DbContext
 {
-    public DbSet<Volunteer> Volunteers { get; set; }
+    public DbSet<Volunteer> Volunteers { get; init; }
+    
+    public DbSet<Species> Species { get; init; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(configuration.GetConnectionString(Constants.DATABASE));

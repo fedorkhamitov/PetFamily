@@ -6,9 +6,9 @@ namespace PetFamily.Application.Modules;
 
 public interface IFileProvider
 {
-    Task<Result<string, Error>> UploadFile(Stream fileStream, MinioFileMetaData fileData, 
+    Task<UnitResult<Error>> UploadFile(IEnumerable<FileContent> fileContents, string bucketName,
         CancellationToken cancellationToken);
-    Task<Result<string, Error>> DeleteFile(MinioFileMetaData fileMetaData, CancellationToken cancellationToken);
+    Task<UnitResult<Error>> DeleteFile(List<MinioFileMetaData> filesMetaData, CancellationToken cancellationToken);
 
     Task<Result<string, Error>> GetFileByObjectName(MinioFileMetaData fileMetaData, 
             CancellationToken cancellationToken);
