@@ -47,7 +47,7 @@ public class AddPetHandler(
             await speciesRepository.IsSpeciesAndBreedExists(command.SpeciesId, command.BreedId, cancellationToken);
         if (isSpeciesAndBreedExists.Value == false)
             return Error.NotFound("species.and.breed.exist", "Not found species or breed by id");
-        
+
         var petResult = new Pet(
             command.Name,
             command.Description,
@@ -64,17 +64,9 @@ public class AddPetHandler(
             position.Value,
             command.HelpStatus);
 
-        try
-        {
-            volunteerResult.Value.AddPet(petResult);
-            await volunteersRepository.Save(volunteerResult.Value, cancellationToken);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e,"Fail add pet to volunteer id: {0}", command.VolunteerId);
+        volunteerResult.Value.AddPet(petResult);
+        await volunteersRepository.Save(volunteerResult.Value, cancellationToken);
 
-            return Error.Failure("fail.add.pet", "Fail Fail add pet to volunteer");
-        }
         logger.LogInformation("Created new pet id: {0}", petResult.Id);
         return petResult.Id;
     }
