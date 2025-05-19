@@ -21,6 +21,8 @@ public class Pet : SoftDeletableEntity
     public DonationDetails DonationDetails { get; private set; } = default!;
     public DateTime CreatedDate { get; private set; }
     public HelpStatus HelpStatus { get; private set; }
+    public IReadOnlyList<PetFile> Files => _files;
+    private readonly List<PetFile> _files = [];
     
     private Pet(){}
 
@@ -37,6 +39,7 @@ public class Pet : SoftDeletableEntity
         string phoneNumber,
         DateTime birthDate,
         DonationDetails donationDetails,
+        Position position,
         HelpStatus helpStatus = HelpStatus.NeedHelp
     )
     {
@@ -54,8 +57,10 @@ public class Pet : SoftDeletableEntity
         PhoneNumber = phoneNumber;
         BirthDate = birthDate;
         DonationDetails = donationDetails;
+        HelpStatus = helpStatus;
+        Position = position;
     }
-
+ 
     public void SetPosition(Position position) 
         => Position = position;
 
@@ -76,6 +81,28 @@ public class Pet : SoftDeletableEntity
             return newPosition.Error;
 
         Position = newPosition.Value;
+        return Result.Success<Error>();
+    }
+    
+    public UnitResult<Error> AddFile(PetFile petFile)
+    {
+        _files.Add(petFile);
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> AddFiles(IEnumerable<PetFile> petFiles)
+    {
+        _files.AddRange(petFiles);
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> RemoveFiles(IEnumerable<PetFile> petFiles)
+    {
+        foreach (var petFile in petFiles)
+        {
+            _files.Remove(petFile);
+        }
+        
         return Result.Success<Error>();
     }
 }

@@ -12,8 +12,8 @@ using PetFamily.Infrastructure;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250508065739_UpdateSoftDelete")]
-    partial class UpdateSoftDelete
+    [Migration("20250515163010_editSpecies")]
+    partial class editSpecies
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,15 +37,15 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<Guid?>("breed_id")
+                    b.Property<Guid?>("species_id")
                         .HasColumnType("uuid")
-                        .HasColumnName("breed_id");
+                        .HasColumnName("species_id");
 
                     b.HasKey("Id")
                         .HasName("pk_breed");
 
-                    b.HasIndex("breed_id")
-                        .HasDatabaseName("ix_breed_breed_id");
+                    b.HasIndex("species_id")
+                        .HasDatabaseName("ix_breed_species_id");
 
                     b.ToTable("breed", (string)null);
                 });
@@ -81,6 +81,11 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("character varying(2000)")
                         .HasColumnName("description");
 
+                    b.Property<string>("Files")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("files");
+
                     b.Property<int>("Height")
                         .HasColumnType("integer")
                         .HasColumnName("height");
@@ -112,6 +117,10 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("phone_number");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer")
+                        .HasColumnName("position");
 
                     b.Property<int>("Weight")
                         .HasColumnType("integer")
@@ -195,8 +204,9 @@ namespace PetFamily.Infrastructure.Migrations
                 {
                     b.HasOne("PetFamily.Domain.Entities.Species", null)
                         .WithMany("Breeds")
-                        .HasForeignKey("breed_id")
-                        .HasConstraintName("fk_breed_species_breed_id");
+                        .HasForeignKey("species_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_breed_species_species_id");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Pet", b =>

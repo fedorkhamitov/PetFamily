@@ -31,6 +31,7 @@ public class Instances
             3, 3,
             "1234567890",
             DateTime.Now,
-            DonationDetails.Create("Test", "Test").Value);
+            DonationDetails.Create("Test", "Test").Value,
+            Position.Create(1).Value); //!!! I added it quickly so as not to worry - in a hurry...
     }
 }
