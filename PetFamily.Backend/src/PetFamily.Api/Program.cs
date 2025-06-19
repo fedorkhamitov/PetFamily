@@ -24,7 +24,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
-builder.Services.AddInfrastructure(builder.Configuration)
+
+builder.Services
+    .AddInfrastructure(builder.Configuration)
     .AddApplication();
 
 builder.Services.AddHostedService<CleanupService>();
