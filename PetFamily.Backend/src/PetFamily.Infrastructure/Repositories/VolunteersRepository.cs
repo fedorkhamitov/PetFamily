@@ -6,13 +6,10 @@ using PetFamily.Domain.Share;
 
 namespace PetFamily.Infrastructure.Repositories;
 
-public class VolunteersRepository : IVolunteersRepository
+public class VolunteersRepository(AppDbContext dbContext) : IVolunteersRepository
 {
-    private readonly AppDbContext _dbContext;
-    public VolunteersRepository(AppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly AppDbContext _dbContext = dbContext;
+
     public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);

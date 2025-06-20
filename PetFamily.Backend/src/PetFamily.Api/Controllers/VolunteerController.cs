@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetFamily.Api.Extensions;
 using PetFamily.Api.Response;
 using PetFamily.Application.Pets.DeletePetFiles;
+using PetFamily.Application.Pets.MovePets;
 using PetFamily.Application.Pets.UploadPetFiles;
 using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.Create;
@@ -38,8 +39,7 @@ public class VolunteerController : ControllerBase
         [FromServices] UpdateMainInfoHandler handler,
         [FromBody] UpdateMainInfoDto dto,
         [FromServices] IValidator<UpdateMainInfoDto> validator,
-        CancellationToken cancellationToken
-    )
+        CancellationToken cancellationToken = default)
     {
         var request = new UpdateMainInfoRequest(id, dto);
         var validationResult = await validator.ValidateAsync(dto, cancellationToken);
@@ -55,7 +55,7 @@ public class VolunteerController : ControllerBase
         [FromServices] UpdateSocialNetworksHandler handler,
         [FromServices] IValidator<UpdateSocialNetworksRequest> validator,
         [FromBody] IEnumerable<UpdateSocialNetworksDto> dtos,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         var request = new UpdateSocialNetworksRequest(id, dtos);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -71,7 +71,7 @@ public class VolunteerController : ControllerBase
         [FromServices] UpdateDonationDetailsHandler handler,
         [FromServices] IValidator<UpdateDonationDetailsRequest> validator,
         [FromBody] UpdateDonationDetailsDto dto,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         var request = new UpdateDonationDetailsRequest(id, dto);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -92,10 +92,7 @@ public class VolunteerController : ControllerBase
         
         var result = await handler.Handle(request, cancellationToken);
 
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-        
-        return Ok(result.Value);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}/soft")]
@@ -108,26 +105,20 @@ public class VolunteerController : ControllerBase
         
         var result = await handler.Handle(request, cancellationToken);
 
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-        
-        return Ok(result.Value);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
 
     [HttpPut("{id:guid}/active")]
     public async Task<ActionResult<Guid>> Restore(
         [FromRoute] Guid id,
         [FromServices] RestoreHandler handler,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         var request = new DeleteRequest(id);
         
         var result = await handler.Handle(request, cancellationToken);
 
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-        
-        return Ok(result.Value);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
 
     [HttpPost("{id:guid}/new-pet")]
@@ -136,7 +127,7 @@ public class VolunteerController : ControllerBase
         [FromBody] AddPetRequest request,
         [FromServices] AddPetHandler handler,
         [FromServices] IValidator<AddPetRequest> validator,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
@@ -161,10 +152,7 @@ public class VolunteerController : ControllerBase
 
         var result = await handler.Handle(command, cancellationToken);
 
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(result.Value);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
     
     [HttpPost("{volunteerId:guid}/pet/{petId:guid}/photos")]
@@ -173,7 +161,7 @@ public class VolunteerController : ControllerBase
         [FromRoute] Guid petId,
         [FromForm] IFormFileCollection files,
         [FromServices] UploadPetFileHandler handler,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         List<FileDto> filesDto = [];
 
@@ -186,10 +174,7 @@ public class VolunteerController : ControllerBase
             var command = new UploadPetFileCommand(volunteerId, petId, filesDto);
 
             var result = await handler.Handle(command, cancellationToken);
-            if (result.IsFailure)
-                return result.Error.ToResponse();
-
-            return Ok(Envelope.Ok());
+            return result.IsFailure ? result.Error.ToResponse() : Ok(Envelope.Ok());
         }
         finally
         {
@@ -207,7 +192,7 @@ public class VolunteerController : ControllerBase
         [FromBody] DeletePetFilesRequest request,
         [FromServices] IValidator<DeletePetFilesRequest> validator,
         [FromServices] DeletePetFilesHandler handler,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
@@ -220,5 +205,20 @@ public class VolunteerController : ControllerBase
             return BadRequest(result.Error);
 
         return Ok(Envelope.Ok());
+    }
+
+    [HttpPut("{volunteerId:guid}/pet/{petId:guid}/new-position-{position:int}")]
+    public async Task<ActionResult> MovePet(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromRoute] int position,
+        [FromServices] MovePetHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new MovePetsCommand(volunteerId, petId, position);
+
+        var result = await handler.Handle(command, cancellationToken);
+        
+        return result.IsFailure ? BadRequest(result.Error) : Ok(Envelope.Ok());
     }
 }
